@@ -50,8 +50,8 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 100
 train_loader, test_loader = get_mnist_data(BATCH_SIZE, device)
 
-G = G_net()
-D = D_net()
+G = G_net().to(device)
+D = D_net().to(device)
 
 D_optimizer = torch.optim.SGD(
     D.parameters(),

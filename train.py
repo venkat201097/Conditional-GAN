@@ -16,7 +16,7 @@ def train(train_loader, D, G, num_epochs, batch_size, D_optimizer, G_optimizer, 
             for batch_idx, (x, y) in tepoch:
 
                 # Data processing
-                x = x.reshape(x.size(0), -1)
+                x = x.reshape(x.size(0), -1).to(device)
                 true_labels = torch.ones(batch_size, device=device)
                 false_labels = torch.zeros(batch_size, device=device)
 
@@ -50,7 +50,7 @@ NUM_EPOCHS = 10
 BATCH_SIZE = 100
 train_loader, test_loader = get_mnist_data(BATCH_SIZE, device)
 
-G = G_net().to(device)
+G = G_net(device=device).to(device)
 D = D_net().to(device)
 
 D_optimizer = torch.optim.SGD(

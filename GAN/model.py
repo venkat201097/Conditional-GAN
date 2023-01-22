@@ -6,7 +6,7 @@ from torch import nn
 
 # bce_loss = nn.BCELoss()
 class G_net(nn.Module):
-    def __init__(self, z_dim=100, device):
+    def __init__(self, z_dim=100, device='cpu'):
         super(G_net, self).__init__()
         self.z_dim = z_dim
         self.device = device

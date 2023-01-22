@@ -46,14 +46,14 @@ def train(train_loader, D, G, num_epochs, batch_size, D_optimizer, G_optimizer, 
     return G, D
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-NUM_EPOCHS = 10
+NUM_EPOCHS = 2
 BATCH_SIZE = 100
 train_loader, test_loader = get_mnist_data(BATCH_SIZE, device)
 
 G = G_net(device=device).to(device)
 D = D_net().to(device)
 
-D_optimizer = torch.optim.Addam(
+D_optimizer = torch.optim.Adam(
     D.parameters(),
     lr=1e-3
 )

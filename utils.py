@@ -21,7 +21,7 @@ def get_mnist_data(batch_size, device, use_test_subset=True):
 
     return train_loader, test_loader #(X_test, y_test)
 
-def generate(num_samples):
+def generate(G, num_samples):
     images = G.generate(num_samples)
     grid = images.reshape(num_samples,1,28,28)
     grid = utils.make_grid(grid, nrow=20, padding=0)

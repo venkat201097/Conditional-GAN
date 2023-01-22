@@ -70,5 +70,5 @@ D_loss_fn = torch.nn.BCELoss()
 
 G, D = train(train_loader, D, G, NUM_EPOCHS, BATCH_SIZE, D_optimizer, G_optimizer, D_loss_fn, G_loss_fn, device)
 
-generate(200)
+generate(G, 200)
 

@@ -6,9 +6,10 @@ from torch import nn
 
 # bce_loss = nn.BCELoss()
 class G_net(nn.Module):
-    def __init__(self, z_dim=100):
+    def __init__(self, z_dim=100, device):
         super(G_net, self).__init__()
         self.z_dim = z_dim
+        self.device = device
 
         self.net = nn.Sequential(
             nn.Linear(self.z_dim, 240),
@@ -24,7 +25,7 @@ class G_net(nn.Module):
         return x
     
     def generate(self, batch_size):
-        z = torch.randn(batch_size, self.z_dim).to(device)
+        z = torch.randn(batch_size, self.z_dim).to(self.device)
         x = self.net(z)
         return x
 

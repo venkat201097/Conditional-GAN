@@ -12,12 +12,14 @@ class G_net(nn.Module):
         self.device = device
 
         self.net = nn.Sequential(
-            nn.Linear(self.z_dim, 240),
+            nn.Linear(self.z_dim, 256),
             nn.ReLU(),
-            nn.Linear(240, 240),
+            nn.Linear(256, 512),
             nn.ReLU(),
-            nn.Linear(240, 784),
-            nn.Sigmoid()
+            nn.Linear(512, 1024),
+            nn.ReLU(),
+            nn.Linear(1024, 784),
+            nn.Tanh()
         )
     
     def forward(self, x):
@@ -35,11 +37,16 @@ class D_net(nn.Module):
         super(D_net, self).__init__()
         
         self.net = nn.Sequential(
-            nn.Linear(784, 240),
+            nn.Linear(784, 1024),
             nn.ReLU(),
-            nn.Linear(240, 240),
+            nn.Dropout(0.3),
+            nn.Linear(1024, 512),
             nn.ReLU(),
-            nn.Linear(240, 1),
+            nn.Dropout(0.3),
+            nn.Linear(512, 256),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(256, 1),
             nn.Sigmoid()
         )
     

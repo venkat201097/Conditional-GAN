@@ -53,17 +53,13 @@ train_loader, test_loader = get_mnist_data(BATCH_SIZE, device)
 G = G_net(device=device).to(device)
 D = D_net().to(device)
 
-D_optimizer = torch.optim.SGD(
+D_optimizer = torch.optim.Addam(
     D.parameters(),
-    lr=0.1,
-    weight_decay=1.00004,
-    momentum=0.5
+    lr=1e-3
 )
-G_optimizer = torch.optim.SGD(
+G_optimizer = torch.optim.Adam(
     G.parameters(),
-    lr=0.1,
-    weight_decay=1.00004,
-    momentum=0.5
+    lr=1e-3
 )
 G_loss_fn = torch.nn.BCELoss()
 D_loss_fn = torch.nn.BCELoss()

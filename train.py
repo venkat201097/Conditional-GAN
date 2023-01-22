@@ -5,7 +5,7 @@ logging.getLogger().setLevel(logging.ERROR)
 from tqdm import tqdm
 # import numpy as np
 import torch
-from utils import get_mnist_data, generate
+from utils import get_mnist_data, generate, save_image
 import matplotlib.pyplot as plt
 
 from GAN import D_net, G_net
@@ -19,6 +19,7 @@ def train_D(D, real_data, generated_fake_data, true_labels, false_labels, D_opti
     d_loss = D_loss_fn(d_real_out, true_labels) + D_loss_fn(d_fake_out, false_labels)
     d_loss.backward()
     D_optimizer.step()
+    D_optimizer.zero_grad()
     return d_loss.item()
 
 def train_G(G, D, batch_size, true_labels, G_optimizer, G_loss_fn):
@@ -30,6 +31,7 @@ def train_G(G, D, batch_size, true_labels, G_optimizer, G_loss_fn):
     g_loss = G_loss_fn(d_g_out, true_labels)
     g_loss.backward()
     G_optimizer.step()
+    G_optimizer.zero_grad()
     return g_loss.item()
 
 def train(train_loader, D, G, num_epochs, batch_size, D_optimizer, G_optimizer, D_loss_fn, G_loss_fn, device):
@@ -38,8 +40,8 @@ def train(train_loader, D, G, num_epochs, batch_size, D_optimizer, G_optimizer, 
     for epoch in range(num_epochs):
         epoch_d_loss = 0
         epoch_g_loss = 0
-        G.train()
-        D.train()
+        # G.train()
+        # D.train()
         with tqdm(enumerate(train_loader), total=len(train_loader), unit="batch", ascii=True, desc="Epoch {}".format(epoch)) as tepoch:
             for bid, (x, y) in tepoch:
 
@@ -49,14 +51,14 @@ def train(train_loader, D, G, num_epochs, batch_size, D_optimizer, G_optimizer, 
                 false_labels = torch.zeros(batch_size, device=device)
 
                 # Discriminator training
-                # D.train()
-                # G.eval()
+                D.train()
+                G.eval()
                 d_loss = train_D(D, x, G.generate(batch_size).detach(), true_labels, false_labels, D_optimizer, D_loss_fn)
                 epoch_d_loss += d_loss
 
                 # Generator training
-                # G.train()
-                # D.eval()
+                G.train()
+                D.eval()
                 g_loss = train_G(G, D, batch_size, true_labels, G_optimizer, G_loss_fn)
                 epoch_g_loss += g_loss
 
@@ -69,6 +71,10 @@ def train(train_loader, D, G, num_epochs, batch_size, D_optimizer, G_optimizer, 
             tepoch.set_postfix(GLoss=epoch_g_loss/bid, DLoss=epoch_d_loss/bid)
             g_losses.append(epoch_g_loss/bid)
             d_losses.append(epoch_d_loss/bid)
+        
+        G.eval()
+        epoch_image = G.generate(200).cpu().detach().view(-1,1,28,28)
+        save_image(epoch_image, 'Image_Epoch-{}.jpg'.format(epoch))
     
     torch.save(D, 'SavedModels/D_epoch-{}'.format(epoch))
     torch.save(G, 'SavedModels/G_epoch-{}'.format(epoch))
@@ -91,11 +97,11 @@ D = D_net().to(device)
 
 D_optimizer = torch.optim.Adam(
     D.parameters(),
-    lr=1e-3
+    lr=2e-4
 )
 G_optimizer = torch.optim.Adam(
     G.parameters(),
-    lr=1e-3
+    lr=2e-4
 )
 G_loss_fn = torch.nn.BCELoss()
 D_loss_fn = torch.nn.BCELoss()

@@ -24,7 +24,7 @@ class G_net(nn.Module):
         return x
     
     def generate(self, batch_size):
-        z = torch.randn(batch_size, self.z_dim)
+        z = torch.randn(batch_size, self.z_dim).to(device)
         x = self.net(z)
         return x
 

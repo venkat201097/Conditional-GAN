@@ -48,18 +48,18 @@ class D_net(nn.Module):
     def __init__(self, x_dim=784, y_dim=10):
         super(D_net, self).__init__()
         self.x_dim = x_dim
-        self.y_dim = y_dim
+        #self.y_dim = y_dim
         
         self.x_proj = nn.Sequential(
             nn.Linear(self.x_dim, 1024),
             nn.LeakyReLU(0.2),
             nn.Dropout(0.3)
         )
-        self.y_proj = nn.Sequential(
+        '''self.y_proj = nn.Sequential(
             nn.Linear(self.y_dim, 256),
             nn.LeakyReLU(0.2),
             nn.Dropout(0.3)
-        )
+        )'''
         self.net = nn.Sequential(
             #nn.Linear(1280, 1024),
             #nn.LeakyReLU(0.2),
@@ -74,7 +74,7 @@ class D_net(nn.Module):
             nn.Sigmoid()
         )
     
-    def forward(self, x, y):
+    def forward(self, x):
         #assert x.shape[0]==y.shape[0]
         x = self.x_proj(x)
         #y = self.y_proj(y)

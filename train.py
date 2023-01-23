@@ -47,8 +47,7 @@ def train(train_loader, D, G, num_epochs, batch_size, D_optimizer, G_optimizer, 
 
         with tqdm(enumerate(train_loader), total=len(train_loader), unit="batch", ascii=True, desc="Epoch {}".format(epoch)) as tepoch:
             for bid, (x, y) in tepoch:
-                if bid%5==0 and bid>0:
-                    break
+                
                 # Data processing
                 x = x.reshape(x.size(0), -1).to(device)
                 y = torch.nn.functional.one_hot(y).type(torch.FloatTensor).to(device)
@@ -106,11 +105,11 @@ D = D_net().to(device)
 
 D_optimizer = torch.optim.Adam(
     D.parameters(),
-    lr=2e-4
+    lr=1e-4
 )
 G_optimizer = torch.optim.Adam(
     G.parameters(),
-    lr=2e-4
+    lr=1e-4
 )
 G_loss_fn = torch.nn.BCELoss()
 D_loss_fn = torch.nn.BCELoss()

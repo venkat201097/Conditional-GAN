@@ -61,9 +61,9 @@ class D_net(nn.Module):
             nn.Dropout(0.3)
         )
         self.net = nn.Sequential(
-            nn.Linear(1280, 1024),
-            nn.LeakyReLU(0.2),
-            nn.Dropout(0.3),
+            #nn.Linear(1280, 1024),
+            #nn.LeakyReLU(0.2),
+            #nn.Dropout(0.3),
             nn.Linear(1024, 512),
             nn.LeakyReLU(0.2),
             nn.Dropout(0.3),
@@ -75,10 +75,10 @@ class D_net(nn.Module):
         )
     
     def forward(self, x, y):
-        assert x.shape[0]==y.shape[0]
+        #assert x.shape[0]==y.shape[0]
         x = self.x_proj(x)
-        y = self.y_proj(y)
-        x = torch.cat((x, y), dim=1)
+        #y = self.y_proj(y)
+        #x = torch.cat((x, y), dim=1)
         x = self.net(x)
         return x.squeeze(1)
 

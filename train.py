@@ -22,7 +22,7 @@ def train_D(D, real_data, generated_fake_data, true_labels, false_labels, D_opti
     D_optimizer.zero_grad()
     return d_loss.item()
 
-def train_G(G, D, batch_size, true_labels, G_optimizer, G_loss_fn):
+def train_G(G, D, batch_size, y, true_labels, G_optimizer, G_loss_fn):
     
     # Generator training
     G_optimizer.zero_grad()

@@ -1,6 +1,7 @@
-# import numpy as np
+import numpy as np
 import torch
 from torchvision import datasets, transforms, utils
+import imageio
 
 def get_mnist_data(batch_size, device, use_test_subset=True):
     # preprocess = transforms.ToTensor()
@@ -34,3 +35,7 @@ def generate(G, num_samples):
 def save_image(grid, filename):
     grid = utils.make_grid(grid, nrow=20, padding=0)
     transforms.ToPILImage()(grid).save('Images/'+filename)
+
+def save_gif(gif, filename):
+    gif = [np.array(transforms.ToPILImage(im)) for im in gif]
+    imageio.mimsave('Images/Gif/'+filename, gif)

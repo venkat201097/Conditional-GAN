@@ -1,16 +1,12 @@
 import torch
 from torch import nn
-# import torch.nn.functional as F
 
-# import logging
-
-# bce_loss = nn.BCELoss()
 class G_net(nn.Module):
     def __init__(self, z_dim=100, device='cpu'):
         super(G_net, self).__init__()
         self.z_dim = z_dim
         self.device = device
-
+        
         self.net = nn.Sequential(
             nn.Linear(self.z_dim, 256),
             nn.LeakyReLU(0.2),
@@ -53,17 +49,4 @@ class D_net(nn.Module):
     def forward(self, x):
         x = self.net(x)
         return x.squeeze(1)
-    
-    # def loss(self, x, labels):
-    #     x = self.net(x)
-    #     return bce_loss(x, labels)
-
-# class GAN(nn.Module):
-#     def __init__(self, z_dim=100):
-#         super(GAN, self).__init__()
-
-#         self.G = G(z_dim)
-#         self.D = D()
-    
-#     def forward()
 
